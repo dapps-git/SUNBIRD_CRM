@@ -190,7 +190,9 @@ const LeadList = () => {
       {/* Filter and Search Bar */}
       <div className="crm-card p-4 flex flex-col md:flex-row items-center gap-3 bg-white">
         <div className="relative flex-1 w-full">
-          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+          <span className="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-slate-400 pointer-events-none z-10">
+            <Search size={16} />
+          </span>
           <input
             type="text"
             placeholder="Search leads by name, phone, place, or address..."
@@ -199,7 +201,7 @@ const LeadList = () => {
               setSearch(e.target.value);
               setPage(1);
             }}
-            className="crm-input pl-10 text-sm"
+            className="crm-input crm-input-has-icon-left text-sm"
           />
         </div>
 

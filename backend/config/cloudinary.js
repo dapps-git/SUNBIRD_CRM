@@ -25,16 +25,28 @@ if (isCloudinaryConfigured) {
  * @param {string} folder - Cloudinary folder
  * @param {boolean} removeLocal - Whether to delete local temp file after upload
  */
-const uploadToCloudinary = async (localFilePath, folder = 'sunbird_crm', removeLocal = true) => {
+const uploadToCloudinary = async (localFilePath, folder = 'sunbird_crm', removeLocal = true, customOptions = {}) => {
   if (!isCloudinaryConfigured) {
     return null;
   }
 
   try {
-    const result = await cloudinary.uploader.upload(localFilePath, {
+    const isImage = /\.(jpg|jpeg|png|bmp|tiff|heic|webp)$/i.test(localFilePath);
+    const options = {
       folder,
-      resource_type: 'auto',
-    });
+      resource_type: isImage ? 'image' : 'auto',
+      ...customOptions,
+    };
+
+    // Automatically convert all images to optimized WebP format
+    if (isImage) {
+      options.format = 'webp';
+      options.transformation = [
+        { quality: 'auto:good', fetch_format: 'webp' },
+      ];
+    }
+
+    const result = await cloudinary.uploader.upload(localFilePath, options);
 
     if (removeLocal && fs.existsSync(localFilePath)) {
       try {

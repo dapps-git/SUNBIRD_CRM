@@ -258,11 +258,21 @@ body {
   box-shadow: 0 0 0 3px hsl(var(--brand-glow));
 }
 
-.crm-input-has-icon-left {
+.crm-input-has-icon-left,
+.crm-input.pl-10,
+.crm-input.pl-9,
+.crm-input.pl-11,
+.crm-input.pl-12,
+input.pl-10,
+input.pl-9,
+input.pl-11,
+input.pl-12 {
   padding-left: 2.875rem !important; /* 46px - gives clear space after 18px icon at left: 14px */
 }
 
-.crm-input-has-icon-right {
+.crm-input-has-icon-right,
+.crm-input.pr-10,
+input.pr-10 {
   padding-right: 2.875rem !important;
 }
 

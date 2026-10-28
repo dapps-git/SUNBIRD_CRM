@@ -13,7 +13,8 @@ router.use(protect);
 
 router
   .route('/')
-  .get(checkPermission('documents'), getDocuments);
+  .get(checkPermission('documents'), getDocuments)
+  .post(checkPermission('documents'), upload.single('file'), uploadDocument);
 
 router.post(
   '/upload',

@@ -60,6 +60,12 @@ exports.uploadDocument = async (req, res) => {
           if (uploadRes) {
             fileUrl = uploadRes.secure_url;
             cloudinaryId = uploadRes.public_id;
+            if (uploadRes.format === 'webp' || mimeType.startsWith('image/')) {
+              mimeType = 'image/webp';
+              if (!fileName.toLowerCase().endsWith('.webp')) {
+                fileName = fileName.replace(/\.[^/.]+$/, '') + '.webp';
+              }
+            }
           } else {
             fileUrl = `/uploads/${req.file.filename}`;
           }

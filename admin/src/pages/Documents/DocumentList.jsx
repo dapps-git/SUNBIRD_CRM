@@ -157,13 +157,15 @@ const DocumentList = () => {
       <div className="crm-card p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="relative">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={17} />
+            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-slate-400 pointer-events-none z-10">
+              <Search size={17} />
+            </span>
             <input
               type="text"
               placeholder="Search by document title, customer name..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="crm-input pl-10 text-sm"
+              className="crm-input crm-input-has-icon-left text-sm"
             />
           </div>
           <div className="flex items-center gap-2">

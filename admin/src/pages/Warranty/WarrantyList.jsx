@@ -152,13 +152,15 @@ const WarrantyList = () => {
       {/* Search */}
       <div className="crm-card p-4">
         <div className="relative">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={17} />
+          <span className="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center text-slate-400 pointer-events-none z-10">
+            <Search size={17} />
+          </span>
           <input
             type="text"
             placeholder="Search by customer name, phone, place..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="crm-input pl-10 text-sm"
+            className="crm-input crm-input-has-icon-left text-sm"
           />
         </div>
       </div>
