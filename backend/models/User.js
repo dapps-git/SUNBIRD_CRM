@@ -55,15 +55,22 @@ const UserSchema = new mongoose.Schema(
     },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
+    passwordChangedAt: Date,
   },
   { timestamps: true }
 );
 
-// Hash password before saving
+// Hash password before saving and update passwordChangedAt
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     return next();
   }
+
+  // Update passwordChangedAt if password was changed for existing user
+  if (!this.isNew) {
+    this.passwordChangedAt = Date.now() - 1000;
+  }
+
   // If already a bcrypt hash (e.g. from environment variable or migration), do not double-hash
   if (typeof this.password === 'string' && /^\$2[aby]\$\d{2}\$[./A-Za-z0-9]{53}$/.test(this.password)) {
     return next();
@@ -76,6 +83,15 @@ UserSchema.pre('save', async function (next) {
 // Match user password
 UserSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
+};
+
+// Check if user changed password after the JWT token was issued
+UserSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(this.passwordChangedAt.getTime() / 1000, 10);
+    return JWTTimestamp < changedTimestamp;
+  }
+  return false;
 };
 
 // Generate and hash password token

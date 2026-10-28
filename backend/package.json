@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js"
+    "dev": "node --watch server.js",
+    "test:email": "node utils/testEmail.js",
+    "hash:password": "node utils/hashPassword.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

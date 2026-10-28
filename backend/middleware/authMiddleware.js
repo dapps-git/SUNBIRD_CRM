@@ -37,6 +37,14 @@ exports.protect = async (req, res, next) => {
       });
     }
 
+    // Invalidate sessions on all devices if password changed after token was issued
+    if (user.changedPasswordAfter && user.changedPasswordAfter(decoded.iat)) {
+      return res.status(401).json({
+        success: false,
+        message: 'Password was recently changed. Please log in again with your new password.',
+      });
+    }
+
     req.user = user;
     next();
   } catch (err) {
@@ -57,7 +65,11 @@ exports.optionalAuth = async (req, res, next) => {
     if (process.env.JWT_SECRET) {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       const user = await User.findById(decoded.id).select('-password');
-      if (user && user.isActive) {
+      if (
+        user &&
+        user.isActive &&
+        (!user.changedPasswordAfter || !user.changedPasswordAfter(decoded.iat))
+      ) {
         req.user = user;
       }
     }
